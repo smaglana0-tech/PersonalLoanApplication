@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2A2A28;
+    --paper: #F5F1E6;
+    --green: #1B3A2F;
+    --green-light: #244A3B;
+    --gold: #C99A3B;
+    --white: #FFFFFF;
+    --line: #D9D2C0;
+    --error: #A5402C;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--green);
+    color: var(--paper);
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+
+  header .mark {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 20px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--gold);
+  }
+
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 5vw, 38px);
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    max-width: 440px;
+    margin: 0 auto;
+    color: #C9D6CD;
+    font-size: 15px;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 640px;
+    margin: -28px auto 80px;
+    padding: 0 20px;
+  }
+
+  form {
+    background: var(--white);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 12px 32px rgba(27,58,47,0.10);
+    overflow: hidden;
+  }
+
+  .section {
+    padding: 36px 40px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-num {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+  }
+
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0;
+    color: var(--green);
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+    .section { padding: 28px 22px; }
+  }
+
+  label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 7px;
+  }
+
+  label .req {
+    color: var(--error);
+    margin-left: 2px;
+  }
+
+  label .hint {
+    font-weight: 400;
+    color: #8A857A;
+    font-size: 12.5px;
+    margin-left: 4px;
+  }
+
+  .field-note {
+    font-size: 12px;
+    color: #8A857A;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .repay-box {
+    background: #F5F1E6;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 16px 18px;
+  }
+
+  .repay-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    padding: 6px 0;
+    color: #5C5748;
+  }
+
+  .repay-row strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .repay-total {
+    border-top: 1px solid var(--line);
+    margin-top: 4px;
+    padding-top: 10px;
+    font-size: 14.5px;
+  }
+
+  .repay-total span, .repay-total strong {
+    color: var(--green);
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    transition: border-color 0.15s ease;
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(27,58,47,0.10);
+  }
+
+  input:invalid:not(:placeholder-shown) {
+    border-color: var(--error);
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .radio-option input { accent-color: var(--green); width: 16px; height: 16px; }
+
+  /* FILE UPLOAD */
+  .upload-box {
+    border: 1.5px dashed var(--line);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    background: #FBFAF6;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    position: relative;
+  }
+
+  .upload-box:hover, .upload-box.dragover {
+    border-color: var(--gold);
+    background: #FBF6EA;
+  }
+
+  .upload-box input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .upload-box .upload-label {
+    font-size: 13.5px;
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .upload-box .upload-sub {
+    font-size: 12px;
+    color: #8A857A;
+    margin-top: 4px;
+  }
+
+  .file-list {
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--green-light);
+  }
+
+  .file-list div {
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .doc-req {
+    background: #F5F1E6;
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #5C5748;
+    margin-bottom: 20px;
+  }
+
+  .doc-req ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+
+  .doc-req li { margin-bottom: 3px; }
+
+  /* CONSENT */
+  .consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: #5C5748;
+  }
+
+  .consent input {
+    margin-top: 3px;
+    accent-color: var(--green);
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* SUBMIT */
+  .submit-section {
+    padding: 32px 40px 40px;
+    background: #FBFAF6;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background: var(--green);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button[type="submit"]:hover { background: var(--green-light); }
+  button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .fine-print {
+    text-align: center;
+    font-size: 12px;
+    color: #9C9686;
+    margin-top: 14px;
+  }
+
+  /* STATUS MESSAGE */
+  #formStatus {
+    display: none;
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 3px;
+    font-size: 13.5px;
+  }
+
+  #formStatus.success {
+    display: block;
+    background: #E6EFE9;
+    color: var(--green);
+    border: 1px solid #B9D2C2;
+  }
+
+  #formStatus.error {
+    display: block;
+    background: #F7E9E5;
+    color: var(--error);
+    border: 1px solid #E3BDB2;
+  }
+
+  /* SUCCESS MODAL */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(27, 58, 47, 0.55);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1000;
+  }
+
+  .overlay.open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--white);
+    border-radius: 6px;
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 36px 32px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-mark {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .modal h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--green);
+    margin: 0 0 16px;
+  }
+
+  .modal p {
+    font-size: 14px;
+    color: #5C5748;
+    margin: 0 0 10px;
+    line-height: 1.55;
+  }
+
+  .modal button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 13px;
+    background: var(--green);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .modal button:hover {
+    background: var(--green-light);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal { animation: none; }
+  }
+
+  footer {
+    text-align: center;
+    padding: 0 20px 60px;
+    font-size: 12.5px;
+    color: #9C9686;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mark">₱</div>
+  <h1>Loan Application</h1>
+  <p>Fill in your details below. All information is reviewed before any loan is approved.</p>
+</header>
+
+<main>
+  <div id="formStatus"></div>
+
+  <form id="loanForm">
+
+    <!-- SECTION 1: PERSONAL DETAILS -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>Personal details</h2>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="firstName">First name<span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" required placeholder="Juan">
+        </div>
+        <div class="field">
+          <label for="lastName">Last name<span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" required placeholder="Dela Cruz">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="address">Home address<span class="req">*</span></label>
+        <input type="text" id="address" name="address" required placeholder="Street, Barangay, City, Province">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="phone">Mobile number<span class="req">*</span></label>
+          <input type="tel" id="phone" name="phone" required placeholder="09XX XXX XXXX">
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="birthdate">Date of birth<span class="req">*</span></label>
+          <input type="date" id="birthdate" name="birthdate" required>
+        </div>
+        <div class="field">
+          <label for="govId">Government ID number<span class="req">*</span></label>
+          <input type="text" id="govId" name="govId" required placeholder="e.g. UMID, PhilSys, Driver's License">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: LOAN DETAILS -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>Loan details</h2>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="loanAmount">Amount requested (₱)<span class="req">*</span> <span class="hint">₱2,000 – ₱5,000</span></label>
+          <input type="number" id="loanAmount" name="loanAmount" required min="2000" max="5000" step="100" placeholder="e.g. 3,000">
+          <div class="field-note">Your loan credit will increase as we go.</div>
+        </div>
+        <div class="field">
+          <label for="loanTerm">Loan term</label>
+          <input type="text" id="loanTerm" name="loanTerm" value="1 week" readonly>
+          <div class="field-note">Fixed at 1 week per loan.</div>
+        </div>
+      </div>
+
+      <div class="field" id="repaymentSummary" style="display:none;">
+        <div class="repay-box">
+          <div class="repay-row"><span>Capital borrowed</span><strong id="repayCapital">₱0.00</strong></div>
+          <div class="repay-row"><span>Interest (10%, due with capital)</span><strong id="repayInterest">₱0.00</strong></div>
+          <div class="repay-row repay-total"><span>Total due at end of week 1</span><strong id="repayTotal">₱0.00</strong></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="purpose">Purpose of loan<span class="req">*</span></label>
+        <textarea id="purpose" name="purpose" required placeholder="Briefly describe what the loan will be used for"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Payment day (end of the 1-week term)<span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="paymentDay" value="Monday" required> Monday</label>
+          <label class="radio-option"><input type="radio" name="paymentDay" value="Wednesday"> Wednesday</label>
+          <label class="radio-option"><input type="radio" name="paymentDay" value="Friday"> Friday</label>
+          <label class="radio-option"><input type="radio" name="paymentDay" value="Saturday"> Saturday</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: EMPLOYMENT / INCOME -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>Income source</h2>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="employer">Employer / business name<span class="req">*</span></label>
+          <input type="text" id="employer" name="employer" required>
+        </div>
+        <div class="field">
+          <label for="monthlyIncome">Monthly income (₱)<span class="req">*</span></label>
+          <input type="number" id="monthlyIncome" name="monthlyIncome" required min="0" step="500">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="incomeType">Type of income<span class="req">*</span></label>
+        <select id="incomeType" name="incomeType" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="Employed - Regular">Employed — Regular</option>
+          <option value="Employed - Contractual">Employed — Contractual</option>
+          <option value="Self-employed">Self-employed</option>
+          <option value="Business owner">Business owner</option>
+          <option value="Remittance">Remittance-supported</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SECTION 4: DOCUMENTS -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>Required documents</h2>
+      </div>
+
+      <div class="doc-req">
+        Please upload clear photos or scans of:
+        <ul>
+          <li>One valid government-issued ID (front and back)</li>
+          <li>Proof of income (payslip, business permit, or bank statement)</li>
+          <li>Proof of billing address (utility bill, less than 3 months old)</li>
+        </ul>
+      </div>
+
+      <div class="field">
+        <label for="idUpload">Government ID<span class="req">*</span> <span class="hint">JPG, PNG or PDF, max 5MB each</span></label>
+        <div class="upload-box" id="idUploadBox">
+          <input type="file" id="idUpload" name="idUpload" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+          <div class="upload-label">Click to upload or drag files here</div>
+          <div class="upload-sub">Front and back of your ID</div>
+        </div>
+        <div class="file-list" id="idFileList"></div>
+      </div>
+
+      <div class="field">
+        <label for="incomeUpload">Proof of income<span class="req">*</span> <span class="hint">JPG, PNG or PDF, max 5MB each</span></label>
+        <div class="upload-box" id="incomeUploadBox">
+          <input type="file" id="incomeUpload" name="incomeUpload" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+          <div class="upload-label">Click to upload or drag files here</div>
+          <div class="upload-sub">Payslip, permit, or bank statement</div>
+        </div>
+        <div class="file-list" id="incomeFileList"></div>
+      </div>
+
+      <div class="field">
+        <label for="billingUpload">Proof of billing address<span class="req">*</span> <span class="hint">JPG, PNG or PDF, max 5MB each</span></label>
+        <div class="upload-box" id="billingUploadBox">
+          <input type="file" id="billingUpload" name="billingUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+          <div class="upload-label">Click to upload or drag files here</div>
+          <div class="upload-sub">Utility bill, less than 3 months old</div>
+        </div>
+        <div class="file-list" id="billingFileList"></div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: CONSENT -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>Consent</h2>
+      </div>
+
+      <div class="field consent">
+        <input type="checkbox" id="consentTruth" name="consentTruth" required>
+        <label for="consentTruth" style="margin:0; font-weight:400;">I confirm that the information and documents I have provided are true, accurate, and complete.</label>
+      </div>
+
+      <div class="field consent">
+        <input type="checkbox" id="consentTerms" name="consentTerms" required>
+        <label for="consentTerms" style="margin:0; font-weight:400;">I understand that this loan is due in full — the entire capital amount plus 10% interest — at the end of the 1-week term, and that missing this payment places the loan in immediate default as described in the loan agreement.</label>
+      </div>
+
+      <div class="field consent">
+        <input type="checkbox" id="consentData" name="consentData" required>
+        <label for="consentData" style="margin:0; font-weight:400;">I consent to the collection and processing of my personal data and documents for the purpose of evaluating this loan application.</label>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <button type="submit" id="submitBtn">Submit application</button>
+      <div class="fine-print">Submitting this form does not guarantee loan approval.</div>
+    </div>
+
+  </form>
+</main>
+
+<footer>
+  Your details are kept confidential and used only for loan processing.
+</footer>
+
+<div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+  <div class="modal">
+    <div class="modal-mark">✓</div>
+    <h2 id="successTitle">Thank you for your application</h2>
+    <p>Please allow 3–5 business days for review and approval.</p>
+    <p>We will send a message to your email or phone with the result.</p>
+    <button type="button" id="closeModalBtn">Done</button>
+  </div>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // SETUP NOTE FOR THE SITE OWNER:
+  // This form currently validates and packages the data client-side.
+  // To actually save entries to a Google Sheet, you need a receiving
+  // endpoint, since a static GitHub Pages site cannot write to Sheets
+  // directly. The most common no-cost approach:
+  //
+  //   1. Create a Google Sheet.
+  //   2. Open Extensions > Apps Script in that Sheet.
+  //   3. Write a doPost(e) function that appends form fields as a new
+  //      row (and saves uploaded files to Google Drive via
+  //      DriveApp, storing the resulting file links in the Sheet).
+  //   4. Deploy it as a Web App (Execute as: Me, Access: Anyone),
+  //      and copy the deployment URL.
+  //   5. Paste that URL into SCRIPT_URL below.
+  //
+  // Until SCRIPT_URL is set, this form will show a success message
+  // but will NOT save data anywhere — it only demonstrates the flow.
+  // ---------------------------------------------------------------
+  const SCRIPT_URL = ""; // <-- paste your Google Apps Script Web App URL here
+
+  const form = document.getElementById('loanForm');
+  const statusBox = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function wireUpload(boxId, inputId, listId) {
+    const box = document.getElementById(boxId);
+    const input = document.getElementById(inputId);
+    const list = document.getElementById(listId);
+
+    input.addEventListener('change', () => renderFiles());
+    box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('dragover'); });
+    box.addEventListener('dragleave', () => box.classList.remove('dragover'));
+    box.addEventListener('drop', (e) => { box.classList.remove('dragover'); });
+
+    function renderFiles() {
+      list.innerHTML = '';
+      Array.from(input.files).forEach(f => {
+        const row = document.createElement('div');
+        const sizeKb = (f.size / 1024).toFixed(0);
+        row.innerHTML = `<span>${f.name}</span><span>${sizeKb} KB</span>`;
+        list.appendChild(row);
+      });
+    }
+  }
+
+  wireUpload('idUploadBox', 'idUpload', 'idFileList');
+  wireUpload('incomeUploadBox', 'incomeUpload', 'incomeFileList');
+  wireUpload('billingUploadBox', 'billingUpload', 'billingFileList');
+
+  // Live repayment calculator: full capital + 10% interest, due at end of the 1-week term
+  const loanAmountInput = document.getElementById('loanAmount');
+  const repaymentSummary = document.getElementById('repaymentSummary');
+  const repayCapital = document.getElementById('repayCapital');
+  const repayInterest = document.getElementById('repayInterest');
+  const repayTotal = document.getElementById('repayTotal');
+
+  function formatPeso(n) {
+    return '₱' + n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function updateRepaymentSummary() {
+    const amount = Number(loanAmountInput.value);
+    if (!amount || amount <= 0) {
+      repaymentSummary.style.display = 'none';
+      return;
+    }
+    const interest = amount * 0.10;
+    const total = amount + interest;
+    repayCapital.textContent = formatPeso(amount);
+    repayInterest.textContent = formatPeso(interest);
+    repayTotal.textContent = formatPeso(total);
+    repaymentSummary.style.display = 'block';
+  }
+
+  loanAmountInput.addEventListener('input', updateRepaymentSummary);
+
+  function showStatus(message, type) {
+    statusBox.textContent = message;
+    statusBox.className = type;
+    statusBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+
+    const requestedAmount = Number(document.getElementById('loanAmount').value);
+    if (requestedAmount < 2000 || requestedAmount > 5000) {
+      showStatus('Loan amount must be between ₱2,000 and ₱5,000.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit application';
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    const allFiles = [
+      ...document.getElementById('idUpload').files,
+      ...document.getElementById('incomeUpload').files,
+      ...document.getElementById('billingUpload').files,
+    ];
+    for (const f of allFiles) {
+      if (f.size > maxSize) {
+        showStatus(`"${f.name}" is larger than 5MB. Please upload a smaller file.`, 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit application';
+        return;
+      }
+    }
+
+    const data = new FormData(form);
+    const payload = {
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      address: data.get('address'),
+      phone: data.get('phone'),
+      email: data.get('email'),
+      birthdate: data.get('birthdate'),
+      govId: data.get('govId'),
+      loanAmount: data.get('loanAmount'),
+      loanTerm: data.get('loanTerm'),
+      purpose: data.get('purpose'),
+      paymentDay: data.get('paymentDay'),
+      employer: data.get('employer'),
+      monthlyIncome: data.get('monthlyIncome'),
+      incomeType: data.get('incomeType'),
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      payload.files = await Promise.all(allFiles.map(async f => ({
+        name: f.name,
+        type: f.type,
+        size: f.size,
+        base64: await fileToBase64(f),
+      })));
+    } catch (err) {
+      showStatus('There was a problem reading your uploaded files. Please try again.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit application';
+      return;
+    }
+
+    if (!SCRIPT_URL) {
+      console.log('Form payload (no SCRIPT_URL configured):', payload);
+      showSuccessModal();
+      form.reset();
+      document.querySelectorAll('.file-list').forEach(el => el.innerHTML = '');
+      repaymentSummary.style.display = 'none';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit application';
+      return;
+    }
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      showSuccessModal();
+      form.reset();
+      document.querySelectorAll('.file-list').forEach(el => el.innerHTML = '');
+      repaymentSummary.style.display = 'none';
+    } catch (err) {
+      showStatus('Something went wrong submitting your application. Please try again or contact us directly.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit application';
+    }
+  });
+
+  // SUCCESS MODAL
+  const successOverlay = document.getElementById('successOverlay');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+
+  function showSuccessModal() {
+    successOverlay.classList.add('open');
+    closeModalBtn.focus();
+  }
+
+  function closeSuccessModal() {
+    successOverlay.classList.remove('open');
+  }
+
+  closeModalBtn.addEventListener('click', closeSuccessModal);
+  successOverlay.addEventListener('click', (e) => {
+    if (e.target === successOverlay) closeSuccessModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && successOverlay.classList.contains('open')) closeSuccessModal();
+  });
+</script>
+
+</body>
+</html>
