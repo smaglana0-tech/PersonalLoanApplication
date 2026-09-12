@@ -704,7 +704,7 @@
   // Until SCRIPT_URL is set, this form will show a success message
   // but will NOT save data anywhere — it only demonstrates the flow.
   // ---------------------------------------------------------------
-  const SCRIPT_URL = ""; // <-- paste your Google Apps Script Web App URL here
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyigfeRS9Tj2xJ_b2D_16jYg5e_kxanjjDNJjjjrO9qOHyNItlhFjJHE_aWDdDnpChGtw/exec";
 
   const form = document.getElementById('loanForm');
   const statusBox = document.getElementById('formStatus');
@@ -850,12 +850,15 @@
     }
 
     try {
-      await fetch(SCRIPT_URL, {
+      const res = await fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+      const result = await res.json();
+      if (result.result !== 'success') {
+        throw new Error(result.error || 'Unknown error from script');
+      }
       showSuccessModal();
       form.reset();
       document.querySelectorAll('.file-list').forEach(el => el.innerHTML = '');
